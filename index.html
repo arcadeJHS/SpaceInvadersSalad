@@ -204,6 +204,8 @@
 				
 				function startGame()
 				{
+					check = true;
+					
 					var splash = document.getElementById("splash");
 					splash.style.display = "none";
 					
@@ -230,7 +232,13 @@
 
 						if (equal == true)
 						{
-							alert("YOU WON!");
+							//alert("YOU WON!");
+							var splash = document.getElementById("splash");
+							var splashText =  document.getElementById("splash-text"); 
+							
+							splashText.innerText = "You won!!!";
+							splash.style.display = "block";
+							
 							selectedSprite = 0;
 							check = false;
 						}
