@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Invaders</title>
+		<meta charset="utf-8">
+		
+        <style type="text/css">
+			* {margin: 0; padding: 0;}
+			html, body {height: 100%; width: 100%;}
+			#wrapper {position: relative;}
+			#splash {color: #ffffff; background: black;}
+			#startButton {padding: 5px; position: absolute; bottom: 5px;}
+			#invaders-background {background: #000;}
+			.pixel {border-right: 1px solid #666; border-bottom: 1px solid #666; float: left; cursor: default;}
+			.color {float: left; border: 1px solid #666; border-left: none;}
+		</style>
+
+        <script type="text/javascript">
+		
+			window.requestAnimFrame = (function(){
+				return	window.requestAnimationFrame       || 
+						window.webkitRequestAnimationFrame || 
+						window.mozRequestAnimationFrame    || 
+						window.oRequestAnimationFrame      || 
+						window.msRequestAnimationFrame     || 
+						function(callback){
+							window.setTimeout(callback, 1000 / 60);
+						};
+			})();
+		
+			window.onload = function() {				
+				
+				var	pixelSize = 30, 
+					screenCols = 11,
+					screenRows = 11,
+					pixelPosition = 0,
+					selectedSprite = 0,
+					timer = 0,
+					pickedColor = null,
+					debug = false,
+					check = true,
+					pixel;
+					
+				var palette = [	"#000000",
+								"#ff0000",
+								"#0000ff",
+								"#ffffff"];
+								
+				var sprites = [
+					[	
+						0,0,0,0,0,0,0,0,0,0,0,
+						0,0,1,0,0,0,0,0,1,0,0,
+						0,0,0,1,0,0,0,1,0,0,0,
+						0,0,1,1,1,1,1,1,1,0,0,
+						0,1,1,0,1,1,1,0,1,1,0,
+						1,1,1,1,1,1,1,1,1,1,1,
+						1,0,1,1,1,1,1,1,1,0,1,
+						1,0,1,0,0,0,0,0,1,0,1,
+						0,0,0,1,1,0,1,1,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,						
+						0,0,0,0,0,0,0,0,0,0,0
+					],										
+					[	
+						0,0,0,0,0,0,0,0,0,0,0,
+						0,0,1,0,0,0,0,0,1,0,0,
+						0,0,0,1,0,0,0,1,0,0,0,
+						1,0,1,1,1,1,1,1,1,0,1,
+						1,1,1,0,1,1,1,0,1,1,1,
+						1,1,1,1,1,1,1,1,1,1,1,
+						0,0,1,1,1,1,1,1,1,0,0,
+						0,0,1,0,0,0,0,0,1,0,0,
+						0,0,1,1,0,0,0,1,1,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,						
+						0,0,0,0,0,0,0,0,0,0,0
+					],
+					[]
+				];
+				
+				var splash = document.getElementById("splash");
+				splash.style.width = (screenCols * pixelSize) + screenCols + "px";
+				splash.style.height = (screenRows * pixelSize) + screenRows + "px";
+				splash.onclick = function() {startGame();};
+				
+				function drawPalette()
+				{
+					var divPalette = document.getElementById("colors-palette");
+					
+					divPalette.onmouseup = function(e) {
+						if (window.event) e = window.event;
+						var srcE = e.srcElement ? e.srcElement : e.target; 
+						var click = srcE.id;
+						pickedColor = parseInt(click);
+					};
+					
+					for (var i = 0; i < palette.length; i++)
+					{
+						pixel = document.createElement("div");
+						pixel.id = i.toString();
+						pixel.className = "color";
+						pixel.style.width = pixel.style.height = pixelSize + "px";
+						pixel.style.background = palette[i];
+						
+						if (debug)
+						{
+							pixel.style.color = "#fff";
+							if (i == 3) pixel.style.color = "#000"; 
+							pixel.innerText = pixel.id;
+						}
+						
+						divPalette.appendChild(pixel);
+					}
+				}
+				
+				function drawSprite()
+				{
+					var bkg = document.getElementById("invaders-background");
+					bkg.innerHTML = '';
+					bkg.style.width = (screenCols * pixelSize) + screenCols + "px";
+					bkg.style.height = (screenRows * pixelSize) + screenRows + "px";
+					bkg.style.marginBottom = pixelSize + "px";
+					
+					bkg.onmouseup = function(e) {
+						if (pickedColor == null)
+							return;
+						if (window.event) e = window.event;
+						var srcE = e.srcElement ? e.srcElement : e.target; 
+						var click = srcE.id;
+						
+						var idx = parseInt(click);
+						
+						//for (var i = 0; i < sprites.length; i ++)
+							sprites[2][idx] = pickedColor;
+
+						//checkSolution();
+					};
+
+					var sprite;
+					switch (selectedSprite)
+					{
+						case 0:
+							selectedSprite = 1;
+							sprite = sprites[1]; 
+							break;
+							
+						case 1:
+							selectedSprite = 0;
+							sprite = sprites[0]; 
+							break;
+							
+						case 2:
+							selectedSprite = 2;
+							sprite = sprites[2];
+							break;
+					}
+					
+					pixelPosition = 0;
+					for (var y = 0; y < screenRows; y++)
+					{
+						for (var x = 0; x < screenCols; x++)
+						{
+							pixel = document.createElement("div");
+							pixel.id = pixelPosition.toString();
+							pixel.className = "pixel";														
+							pixel.style.width = pixel.style.height = pixelSize + "px";
+							pixel.style.background = palette[sprite[pixelPosition]];
+							
+							if (debug)
+							{
+								pixel.style.color = "#fff";
+								pixel.innerText = pixel.id;
+							}
+							
+							bkg.appendChild(pixel);
+							pixelPosition++;
+						}
+					}
+				}
+				
+				function loop()
+				{
+					if (timer == 16) timer = 0;
+					if (timer == 0) drawSprite();
+					
+					if (check == true)
+						checkSolution();
+					
+					timer++;				  
+					requestAnimFrame(loop);
+				}
+				
+				function drawRandom()
+				{
+					selectedSprite = 2;
+					var randomColor;
+					for (var i = 0; i < 121; i++)
+					{
+						randomColor = Math.floor(Math.random() * 4);
+						sprites[2][i] = randomColor;
+					}
+					
+					drawSprite();
+				}
+				
+				function startGame()
+				{
+					var splash = document.getElementById("splash");
+					splash.style.display = "none";
+					
+					drawPalette();
+					loop();
+					
+					setTimeout(drawRandom, 5000);
+				}
+				
+				function checkSolution()
+				{
+					var equal = true;					
+
+					if (sprites[0].length > 0 && sprites[2].length > 0)
+					{					
+						for (var i = 0; i < 121; i ++)
+						{
+							if (sprites[2][i] != sprites[0][i])
+							{
+								equal = false;
+								return;
+							}
+						}
+
+						if (equal == true)
+						{
+							alert("YOU WON!");
+							selectedSprite = 0;
+							check = false;
+						}
+					}
+				}
+				
+			};
+		</script>	
+    </head>
+	
+	<body>
+		<div id="wrapper">
+			<div id="splash">
+				The game is pretty simple: just look at the space invader on the screen and try to memorize its shape and colors.<br />
+				When you are ready, press the "Start" button: you will be allowed to watch the sprite for 5 seconds, then the invaders will be remixed in a new shape and a mess of colors.
+				To win the game, you need to rebuild the invader in its original shape and colors.
+				<button id="startButton">start</button> 
+			</div>
+			<div id="invaders-background"></div>
+			<div id="colors-palette"></div>
+		</div>
+	</body>
+</html>
