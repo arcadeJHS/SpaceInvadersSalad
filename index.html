@@ -233,7 +233,10 @@
 						if (equal == true)
 						{
 							var splash = document.getElementById("splash");
-							var splashText =  document.getElementById("splash-text"); 
+							var splashText =  document.getElementById("splash-text");
+							var startButton =  document.getElementById("startButton");
+							
+							startButton.style.display = "none";
 							
 							splashText.innerText = "You won!!!";
 							splash.style.position = "absolute";
