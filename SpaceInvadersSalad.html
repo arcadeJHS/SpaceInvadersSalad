@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-	<head>
+  <head>
 		<title>SpaceInvadersSalad</title>
 		<meta charset="utf-8">
 		
@@ -8,8 +8,9 @@
 			* {margin: 0; padding: 0;}
 			html, body {height: 100%; width: 100%;}
 			#wrapper {position: relative;}
-			#splash {color: #ffffff; background: black;}
-			#startButton {padding: 5px; position: absolute; bottom: 5px;}
+			#splash {background: black;}
+			#splash-text {font-family: "Courier New", Courier, monospace; color: #ffffff; padding: 10px; text-align: justify;}
+			#startButton {padding: 5px; position: absolute; bottom: 5px; left: 5px;}
 			#invaders-background {background: #000;}
 			.pixel {border-right: 1px solid #666; border-bottom: 1px solid #666; float: left; cursor: default;}
 			.color {float: left; border: 1px solid #666; border-left: none;}
@@ -30,7 +31,7 @@
 		
 			window.onload = function() {				
 				
-				var	pixelSize = 30, 
+				var	pixelSize = 40, 
 					screenCols = 11,
 					screenRows = 11,
 					pixelPosition = 0,
@@ -203,6 +204,8 @@
 				
 				function startGame()
 				{
+					check = true;
+					
 					var splash = document.getElementById("splash");
 					splash.style.display = "none";
 					
@@ -229,7 +232,20 @@
 
 						if (equal == true)
 						{
-							alert("YOU WON!");
+							var splash = document.getElementById("splash");
+							var splashText =  document.getElementById("splash-text");
+							var startButton =  document.getElementById("startButton");
+							
+							startButton.style.display = "none";
+							
+							splashText.innerHTML = "You won!!!";
+							splash.style.position = "absolute";
+							splash.style.top = "164px";
+							splash.style.left = "123px";
+							splash.style.width = "205px";
+							splash.style.height = "164px";
+							splash.style.display = "block";
+							
 							selectedSprite = 0;
 							check = false;
 						}
@@ -243,9 +259,15 @@
 	<body>
 		<div id="wrapper">
 			<div id="splash">
-				The game is pretty simple: just look at the space invader on the screen and try to memorize its shape and colors.<br />
-				When you are ready, press the "Start" button: you will be allowed to watch the sprite for 5 seconds, then the invaders will be remixed in a new shape and a mess of colors.
-				To win the game, you need to rebuild the invader in its original shape and colors.
+				<p id="splash-text">
+				The game is pretty simple: when you press the "Start" button you will be able to look at a space invader for 5 seconds.<br />
+				Try to memorize its shape and colors.<br />
+				Then the invaders will be suddenly remixed in a mess (an alien salad) of colors.<br /><br />
+				To win the game, you need to get the invader back to its original shape and colors.<br />
+				1. Click on a square in the 4 colours palette at the bottom to select a color.<br />
+				2. Then click on a square on the jammed alien to paint it with the selected color.<br /><br />
+				Oh I forgot! While you are memorizing it, the alien will move!
+				</p>
 				<button id="startButton">start</button> 
 			</div>
 			<div id="invaders-background"></div>
