@@ -8,7 +8,7 @@
 			* {margin: 0; padding: 0;}
 			html, body {height: 100%; width: 100%;}
 			#wrapper {position: relative;}
-			#splash {color: #ffffff; background: black; padding: 10px;}
+			#splash {color: #ffffff; background: black;}
 			#startButton {padding: 5px; position: absolute; bottom: 5px;}
 			#invaders-background {background: #000;}
 			.pixel {border-right: 1px solid #666; border-bottom: 1px solid #666; float: left; cursor: default;}
@@ -243,9 +243,11 @@
 	<body>
 		<div id="wrapper">
 			<div id="splash">
+				<p>
 				The game is pretty simple: just look at the space invader on the screen and try to memorize its shape and colors.<br />
 				When you are ready, press the "Start" button: you will be allowed to watch the sprite for 5 seconds, then the invaders will be remixed in a new shape and a mess of colors.
 				To win the game, you need to rebuild the invader in its original shape and colors.
+				</p>
 				<button id="startButton">start</button> 
 			</div>
 			<div id="invaders-background"></div>
